@@ -1,0 +1,15 @@
+<div class="theme-toggle" role="radiogroup" [attr.aria-label]="i18n.t('theme.ariaLabel')">
+  <button
+    type="button"
+    *ngFor="let option of options"
+    class="theme-toggle__btn"
+    [class.theme-toggle__btn--active]="preference() === option.value"
+    role="radio"
+    [attr.aria-checked]="preference() === option.value"
+    [title]="i18n.t(option.labelKey)"
+    (click)="select(option.value)"
+  >
+    <span aria-hidden="true">{{ option.icon }}</span>
+    <span class="theme-toggle__label">{{ i18n.t(option.labelKey) }}</span>
+  </button>
+</div>

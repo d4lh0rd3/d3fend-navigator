@@ -1,0 +1,20 @@
+<div class="technique" [class.technique--has-children]="hasChildren" *ngIf="isVisible">
+  <button
+    type="button"
+    class="technique__row"
+    [class.technique__row--selected]="isSelected"
+    [class.technique__row--match]="isMatch"
+    [class.technique__row--tinted]="!!rowColor"
+    [style.background-color]="rowColor"
+    (click)="onRowClick($event)"
+    (contextmenu)="onContextMenu($event)"
+  >
+    <span class="technique__caret" *ngIf="hasChildren">{{ isExpanded ? '▾' : '▸' }}</span>
+    <span class="technique__id">{{ node.id }}</span>
+    <span class="technique__name">{{ node.name }}</span>
+  </button>
+
+  <div class="technique__children" *ngIf="hasChildren && isExpanded">
+    <app-technique-node *ngFor="let child of node.children" [node]="child"></app-technique-node>
+  </div>
+</div>

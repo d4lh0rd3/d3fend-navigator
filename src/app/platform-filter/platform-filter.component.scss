@@ -1,0 +1,120 @@
+.platform-filter {
+  position: relative;
+  flex: none;
+}
+
+.platform-filter__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-sm);
+  background: var(--matrix-column-bg);
+  color: var(--app-fg);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--matrix-row-hover);
+    border-color: var(--matrix-caret);
+  }
+}
+
+.platform-filter__beta {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.05rem 0.35rem;
+  border-radius: var(--radius-pill);
+  background: var(--matrix-match);
+  color: #111827;
+}
+
+.platform-filter__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.3rem;
+  border-radius: var(--radius-pill);
+  background: var(--matrix-selected);
+  color: #ffffff;
+  font-size: 0.68rem;
+}
+
+.platform-filter__panel {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  z-index: 50;
+  width: 15rem;
+  padding: 0.55rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-md);
+  background: var(--matrix-column-bg);
+  box-shadow: var(--shadow-lg);
+  animation: dropdown-in var(--transition-base);
+}
+
+.platform-filter__panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--matrix-id);
+}
+
+.platform-filter__hint {
+  margin: 0 0 0.5rem;
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--matrix-id);
+}
+
+.platform-filter__clear {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 400;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--matrix-id);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--matrix-row-hover);
+  }
+}
+
+.platform-filter__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 14rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.35rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--matrix-row-hover);
+    }
+
+    input {
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,87 @@
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 1.1rem 0;
+  background: var(--app-bg);
+  border-bottom: 1px solid var(--matrix-border);
+  overflow-x: auto;
+}
+
+.tabs__tab {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 12rem;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.78rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: transparent;
+  color: var(--matrix-id);
+  cursor: pointer;
+  flex: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+
+  &:hover {
+    background: var(--matrix-row-hover);
+    color: var(--matrix-name);
+  }
+
+  &--active {
+    background: var(--matrix-column-bg);
+    color: var(--matrix-name);
+    font-weight: 600;
+    border-color: var(--matrix-border);
+    border-bottom-color: var(--matrix-column-bg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: -1px;
+  }
+}
+
+.tabs__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabs__close {
+  flex: none;
+  line-height: 1;
+  padding: 0.1rem 0.3rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--matrix-badge-attack-bg);
+    color: var(--matrix-badge-attack-fg);
+  }
+}
+
+.tabs__new {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  margin-bottom: 0.2rem;
+  font-size: 1rem;
+  line-height: 1;
+  border: 1px dashed var(--matrix-border);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--matrix-id);
+  cursor: pointer;
+
+  &:hover {
+    border-style: solid;
+    border-color: var(--matrix-selected);
+    color: var(--matrix-selected);
+    background: var(--matrix-selected-soft);
+  }
+}

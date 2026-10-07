@@ -1,0 +1,18 @@
+<ng-container *ngIf="!loading(); else loadingTpl">
+  <p class="matrix__error" *ngIf="error() as message">
+    {{ i18n.t('matrix.loadError', { message: message }) }}
+  </p>
+
+  <div class="matrix" *ngIf="!error()">
+    <div class="matrix__column" *ngFor="let tactic of tactics()" [attr.data-tactic]="tactic.id">
+      <div class="matrix__column-header" [title]="tactic.definition">{{ tactic.name }}</div>
+      <div class="matrix__column-body">
+        <app-technique-node *ngFor="let node of techniquesFor(tactic.id)" [node]="node"></app-technique-node>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #loadingTpl>
+  <p class="matrix__loading">{{ i18n.t('matrix.loading') }}</p>
+</ng-template>

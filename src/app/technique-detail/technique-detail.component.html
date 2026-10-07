@@ -1,0 +1,113 @@
+<div class="technique-detail" *ngIf="selectionCount() > 1">
+  <p class="technique-detail__hint">
+    {{ i18n.t('techniqueDetail.multiSelectHint', { count: selectionCount() }) }}
+  </p>
+</div>
+
+<ng-container *ngIf="selectionCount() <= 1">
+  <div class="technique-detail" *ngIf="technique() as t; else emptyTpl">
+  <h2 class="technique-detail__title">{{ t.id }} — {{ t.name }}</h2>
+
+  <p class="technique-detail__definition" *ngIf="t.definition; else noDefinition">{{ t.definition }}</p>
+  <ng-template #noDefinition>
+    <p class="technique-detail__hint">
+      {{ i18n.t('techniqueDetail.noDefinition') }}
+    </p>
+  </ng-template>
+
+  <p class="technique-detail__scope" *ngIf="descendantCount() > 0">
+    {{ i18n.t('techniqueDetail.scope', { count: descendantCount(), id: t.id }) }}
+  </p>
+
+  <section class="technique-detail__section" *ngIf="relatedArtifacts().length">
+    <button
+      type="button"
+      class="technique-detail__section-toggle"
+      (click)="toggleArtifactsSection()"
+      [attr.aria-expanded]="!isArtifactsCollapsed()"
+    >
+      <span class="technique-detail__caret">{{ isArtifactsCollapsed() ? '▸' : '▾' }}</span>
+      <h3>{{ i18n.t('techniqueDetail.artifactsTitle') }} <span class="technique-detail__count">({{ relatedArtifacts().length }})</span></h3>
+    </button>
+    <ul *ngIf="!isArtifactsCollapsed()">
+      <li *ngFor="let r of relatedArtifacts()">
+        <span class="technique-detail__predicate">{{ r.predicate }}</span> {{ r.artifactName }}
+        <span class="technique-detail__via" *ngIf="r.sourceTechniqueName">{{ i18n.t('common.via') }} {{ r.sourceTechniqueName }}</span>
+      </li>
+    </ul>
+  </section>
+
+  <div class="technique-detail__tactic-filter" *ngIf="availableTactics().length">
+    <button type="button" class="technique-detail__tactic-trigger" (click)="toggleTacticFilterPanel()">
+      {{ i18n.t('techniqueDetail.filterByTactic') }}
+      <span class="technique-detail__tactic-badge" *ngIf="selectedTactics().size">{{ selectedTactics().size }}</span>
+    </button>
+
+    <div class="technique-detail__tactic-panel" *ngIf="isTacticFilterOpen()">
+      <div class="technique-detail__tactic-panel-header">
+        <span>{{ i18n.t('techniqueDetail.offensiveTactics') }}</span>
+        <button
+          type="button"
+          class="technique-detail__tactic-clear"
+          *ngIf="selectedTactics().size"
+          (click)="clearTacticFilter($event)"
+        >
+          {{ i18n.t('common.clearAll') }}
+        </button>
+      </div>
+      <ul class="technique-detail__tactic-list">
+        <li *ngFor="let tactic of availableTactics()">
+          <label>
+            <input type="checkbox" [checked]="isTacticSelected(tactic)" (change)="toggleTactic(tactic)" />
+            {{ tactic }}
+          </label>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="technique-detail__section" *ngFor="let group of mappingsByFramework()">
+    <button
+      type="button"
+      class="technique-detail__section-toggle"
+      (click)="toggleFramework(group.framework)"
+      [attr.aria-expanded]="!isFrameworkCollapsed(group.framework)"
+    >
+      <span class="technique-detail__caret">{{ isFrameworkCollapsed(group.framework) ? '▸' : '▾' }}</span>
+      <h3>{{ group.label }} <span class="technique-detail__count">({{ group.items.length }})</span></h3>
+    </button>
+    <ul *ngIf="!isFrameworkCollapsed(group.framework)">
+      <li *ngFor="let m of group.items">
+        <div>
+          <span
+            class="technique-detail__attack-id"
+            [title]="i18n.t('common.via') + ' ' + m.viaDefensiveRelation + ' → ' + m.viaDefensiveArtifactId + '  /  ' + m.viaOffensiveRelation + ' → ' + m.viaOffensiveArtifactName"
+          >{{ m.offensiveTechniqueId }}</span>
+          {{ m.offensiveTechniqueName }}
+          <span class="technique-detail__tactic" *ngIf="m.offensiveTacticName">{{ m.offensiveTacticName }}</span>
+          <span class="technique-detail__via" *ngIf="m.sourceTechniqueName">{{ i18n.t('common.via') }} {{ m.sourceTechniqueName }}</span>
+        </div>
+        <div class="technique-detail__chain" *ngIf="showChain()">
+          {{ m.viaDefensiveRelation }} → {{ m.viaDefensiveArtifactId }} &nbsp;/&nbsp; {{ m.viaOffensiveRelation }} → {{ m.viaOffensiveArtifactName }}
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <p
+    class="technique-detail__hint"
+    *ngIf="selectedTactics().size && !mappingsByFramework().length; else noDataHint"
+  >
+    {{ i18n.t('techniqueDetail.noMappingForTactics') }}
+  </p>
+  <ng-template #noDataHint>
+    <p class="technique-detail__hint" *ngIf="!relatedArtifacts().length && !mappingsByFramework().length">
+      {{ i18n.t('techniqueDetail.noRelationOrMapping') }}
+    </p>
+  </ng-template>
+</div>
+
+<ng-template #emptyTpl>
+  <p class="technique-detail__hint">{{ i18n.t('techniqueDetail.selectHint') }}</p>
+</ng-template>
+</ng-container>

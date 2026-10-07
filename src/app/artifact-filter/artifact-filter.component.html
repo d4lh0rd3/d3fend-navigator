@@ -1,0 +1,40 @@
+<div class="artifact-filter">
+  <button type="button" class="artifact-filter__trigger" (click)="toggleOpen()">
+    {{ i18n.t('artifactFilter.trigger') }}
+    <span class="artifact-filter__badge" *ngIf="selectedIds().size">{{ selectedIds().size }}</span>
+  </button>
+
+  <div class="artifact-filter__panel" *ngIf="isOpen()">
+    <div class="artifact-filter__panel-header">
+      <input
+        type="search"
+        class="artifact-filter__search"
+        [placeholder]="i18n.t('artifactFilter.searchPlaceholder')"
+        [ngModel]="filterQuery()"
+        (ngModelChange)="onFilterQueryInput($event)"
+      />
+      <button
+        type="button"
+        class="artifact-filter__clear"
+        *ngIf="selectedIds().size"
+        (click)="clearAll($event)"
+      >
+        {{ i18n.t('common.clearAll') }}
+      </button>
+    </div>
+
+    <ul class="artifact-filter__list">
+      <li *ngFor="let artifact of visibleArtifacts()">
+        <label>
+          <input
+            type="checkbox"
+            [checked]="selectedIds().has(artifact.id)"
+            (change)="toggleArtifact(artifact.id)"
+          />
+          {{ artifact.name }}
+        </label>
+      </li>
+      <li class="artifact-filter__empty" *ngIf="!visibleArtifacts().length">{{ i18n.t('artifactFilter.empty') }}</li>
+    </ul>
+  </div>
+</div>

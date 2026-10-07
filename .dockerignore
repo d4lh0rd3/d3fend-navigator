@@ -1,0 +1,19 @@
+# Node / build
+node_modules
+dist
+.angular
+coverage
+
+# Cache ETL local
+data/raw
+
+# VCS / éditeurs / OS
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+
+# Divers
+*.log
+npm-debug.log

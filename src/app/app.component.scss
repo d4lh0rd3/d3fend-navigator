@@ -1,0 +1,57 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  background: var(--matrix-header-bg);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  z-index: 10;
+
+  h1 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--matrix-header-fg);
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+
+    &::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: var(--radius-pill);
+      background: var(--matrix-selected);
+      box-shadow: 0 0 0 4px var(--matrix-selected-soft);
+    }
+  }
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.85rem 1.1rem 1.1rem;
+}
+
+.app-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.app-body app-matrix {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: none;
+  /* largeur commune à layer-settings et technique-detail */
+  width: 21rem;
+}

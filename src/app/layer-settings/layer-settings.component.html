@@ -1,0 +1,78 @@
+<div class="layer-settings">
+  <div class="layer-settings__toolbar">
+    <input
+      class="layer-settings__name"
+      type="text"
+      [ngModel]="layer().name"
+      (ngModelChange)="onNameChange($event)"
+      [placeholder]="i18n.t('layerSettings.namePlaceholder')"
+    />
+    <div class="layer-settings__actions">
+      <button type="button" (click)="onNewLayer()">{{ i18n.t('layerSettings.new') }}</button>
+      <label class="layer-settings__import-label">
+        {{ i18n.t('layerSettings.import') }}
+        <input type="file" accept="application/json" (change)="onImportFile($event)" hidden />
+      </label>
+      <button type="button" (click)="onExport()">{{ i18n.t('layerSettings.exportJson') }}</button>
+      <button type="button" (click)="onExportSvg()">{{ i18n.t('layerSettings.exportSvg') }}</button>
+      <button type="button" (click)="onExportAttackEnterprise()">{{ i18n.t('layerSettings.exportAttackEnterprise') }}</button>
+      <button type="button" (click)="onExportAttackIcs()">{{ i18n.t('layerSettings.exportAttackIcs') }}</button>
+    </div>
+  </div>
+
+  <div class="layer-settings__editor" *ngIf="selectedTechniqueId(); else noSelection">
+    <h3 class="layer-settings__technique-id" *ngIf="selectionCount() <= 1">{{ selectedTechniqueId() }}</h3>
+    <h3 class="layer-settings__technique-id" *ngIf="selectionCount() > 1">
+      {{ i18n.t('layerSettings.selectionCount', { count: selectionCount() }) }}
+    </h3>
+    <p class="layer-settings__hint" *ngIf="selectionCount() > 1">
+      {{ i18n.t('layerSettings.bulkHint') }}
+    </p>
+
+    <div class="layer-settings__field">
+      <span class="layer-settings__label">{{ i18n.t('layerSettings.color') }}</span>
+      <div class="layer-settings__swatches">
+        <button
+          type="button"
+          class="swatch"
+          *ngFor="let c of presetColors"
+          [style.background-color]="c"
+          [class.swatch--active]="selectedAnnotation()?.color === c"
+          (click)="onColorChange(c)"
+          [attr.aria-label]="i18n.t('layerSettings.colorSwatch', { color: c })"
+          [title]="c"
+        ></button>
+        <button
+          type="button"
+          class="swatch swatch--none"
+          [class.swatch--active]="!selectedAnnotation()?.color"
+          (click)="onColorChange('')"
+          [attr.aria-label]="i18n.t('layerSettings.noColor')"
+          [title]="i18n.t('layerSettings.noColor')"
+        ></button>
+      </div>
+    </div>
+
+    <label class="layer-settings__field">
+      <span class="layer-settings__label">{{ i18n.t('layerSettings.score') }}</span>
+      <input
+        type="number"
+        [ngModel]="selectedAnnotation()?.score ?? null"
+        (ngModelChange)="onScoreChange($event)"
+      />
+    </label>
+
+    <label class="layer-settings__field">
+      <span class="layer-settings__label">{{ i18n.t('layerSettings.comment') }}</span>
+      <textarea
+        rows="4"
+        [ngModel]="selectedAnnotation()?.comment ?? ''"
+        (ngModelChange)="onCommentChange($event)"
+      ></textarea>
+    </label>
+  </div>
+
+  <ng-template #noSelection>
+    <p class="layer-settings__hint">{{ i18n.t('layerSettings.emptyHint') }}</p>
+  </ng-template>
+</div>

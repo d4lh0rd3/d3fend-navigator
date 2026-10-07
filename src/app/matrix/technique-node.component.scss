@@ -1,0 +1,73 @@
+.technique {
+  border-bottom: 1px solid var(--matrix-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.technique__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.4rem 0.55rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+
+  &:hover {
+    background: var(--matrix-row-hover);
+  }
+}
+
+.technique__row--selected {
+  background: var(--matrix-selected-soft);
+  box-shadow: inset 3px 0 0 var(--matrix-selected);
+}
+
+.technique__row--match {
+  box-shadow: inset 3px 0 0 var(--matrix-match);
+}
+
+.technique__row--selected.technique__row--match {
+  box-shadow: inset 3px 0 0 var(--matrix-selected), inset 0 0 0 999px var(--matrix-selected-soft);
+}
+
+/* Les couleurs d'annotation sont claires dans les deux thèmes : texte sombre forcé. */
+.technique__row--tinted,
+.technique__row--tinted .technique__id,
+.technique__row--tinted .technique__caret {
+  color: #111827;
+}
+
+.technique__caret {
+  width: 0.9rem;
+  flex: none;
+  color: var(--matrix-caret);
+  transition: transform var(--transition-fast);
+}
+
+.technique__id {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--matrix-id);
+  min-width: 4.5rem;
+}
+
+.technique__name {
+  flex: 1 1 auto;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
+
+.technique__children {
+  padding-left: 1.1rem;
+  border-left: 1px dashed var(--matrix-border);
+  margin-left: 0.7rem;
+}

@@ -1,0 +1,121 @@
+.artifact-filter {
+  position: relative;
+  flex: none;
+}
+
+.artifact-filter__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-sm);
+  background: var(--matrix-column-bg);
+  color: var(--app-fg);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--matrix-row-hover);
+    border-color: var(--matrix-caret);
+  }
+}
+
+.artifact-filter__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.3rem;
+  border-radius: var(--radius-pill);
+  background: var(--matrix-selected);
+  color: #ffffff;
+  font-size: 0.68rem;
+}
+
+.artifact-filter__panel {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  z-index: 50;
+  width: 16rem;
+  padding: 0.55rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-md);
+  background: var(--matrix-column-bg);
+  box-shadow: var(--shadow-lg);
+  animation: dropdown-in var(--transition-base);
+}
+
+.artifact-filter__panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.artifact-filter__search {
+  flex: 1 1 auto;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.78rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-sm);
+
+  &:focus-visible {
+    border-color: var(--matrix-selected);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--matrix-selected-soft);
+  }
+}
+
+.artifact-filter__clear {
+  flex: none;
+  padding: 0.3rem 0.45rem;
+  font-size: 0.7rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--matrix-id);
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--matrix-row-hover);
+  }
+}
+
+.artifact-filter__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 16rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.35rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--matrix-row-hover);
+    }
+
+    input {
+      cursor: pointer;
+    }
+  }
+}
+
+.artifact-filter__empty {
+  padding: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--matrix-id);
+}

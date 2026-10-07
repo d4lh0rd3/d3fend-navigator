@@ -1,0 +1,25 @@
+<ul
+  class="context-menu"
+  *ngIf="target() as t"
+  [style.left.px]="t.x"
+  [style.top.px]="t.y"
+>
+  <li>
+    <a [href]="tacticUrl(t.tacticId)" target="_blank" rel="noopener noreferrer">
+      {{ i18n.t('contextMenu.viewTactic') }}
+    </a>
+  </li>
+  <li>
+    <a
+      *ngIf="t.techniqueLocalName as localName"
+      [href]="techniqueUrl(localName)"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {{ i18n.t('contextMenu.viewTechnique') }}
+    </a>
+    <span *ngIf="!t.techniqueLocalName" class="context-menu__disabled" [title]="i18n.t('contextMenu.noTechniquePage')">
+      {{ i18n.t('contextMenu.viewTechnique') }}
+    </span>
+  </li>
+</ul>

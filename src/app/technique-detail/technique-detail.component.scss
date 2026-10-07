@@ -1,0 +1,241 @@
+:host {
+  display: block;
+  padding: 0.9rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-md);
+  background: var(--matrix-column-bg);
+  box-shadow: var(--shadow-sm);
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.technique-detail__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.technique-detail__definition {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--matrix-name);
+  margin: 0 0 0.75rem;
+  /* conserve les retours à la ligne présents dans les définitions D3FEND */
+  white-space: pre-line;
+}
+
+.technique-detail__hint {
+  font-size: 0.8rem;
+  color: var(--matrix-id);
+}
+
+.technique-detail__scope {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--matrix-id);
+  margin: 0 0 0.75rem;
+}
+
+.technique-detail__via {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--matrix-id);
+  margin-left: 0.3rem;
+}
+
+.technique-detail__section {
+  margin-top: 1rem;
+
+  h3 {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--matrix-id);
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1rem;
+    font-size: 0.82rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+}
+
+.technique-detail__predicate {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--matrix-badge-fg);
+  background: var(--matrix-badge-bg);
+  border-radius: var(--radius-sm);
+  padding: 0.05rem 0.35rem;
+  margin-right: 0.3rem;
+}
+
+.technique-detail__attack-id {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--matrix-badge-attack-fg);
+  background: var(--matrix-badge-attack-bg);
+  border-radius: var(--radius-sm);
+  padding: 0.05rem 0.35rem;
+  margin-right: 0.3rem;
+  cursor: help;
+}
+
+.technique-detail__section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: 100%;
+  padding: 0;
+  margin: 0 0 0.4rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+
+  &:hover h3 {
+    color: var(--matrix-name);
+  }
+}
+
+.technique-detail__caret {
+  flex: none;
+  font-size: 0.7rem;
+  color: var(--matrix-caret);
+}
+
+.technique-detail__count {
+  font-weight: 400;
+  text-transform: none;
+}
+
+.technique-detail__chain {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  color: var(--matrix-id);
+  margin: 0.15rem 0 0.4rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--matrix-row-hover);
+  border-radius: var(--radius-sm);
+}
+
+.technique-detail__tactic {
+  font-size: 0.7rem;
+  color: var(--matrix-caret);
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-pill);
+  padding: 0.05rem 0.45rem;
+  margin-left: 0.3rem;
+  white-space: nowrap;
+}
+
+.technique-detail__tactic-filter {
+  position: relative;
+  margin-top: 0.65rem;
+}
+
+.technique-detail__tactic-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-sm);
+  background: var(--matrix-column-bg);
+  color: var(--app-fg);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--matrix-row-hover);
+    border-color: var(--matrix-caret);
+  }
+}
+
+.technique-detail__tactic-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.3rem;
+  border-radius: var(--radius-pill);
+  background: var(--matrix-selected);
+  color: #ffffff;
+  font-size: 0.68rem;
+}
+
+.technique-detail__tactic-panel {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  z-index: 50;
+  width: 14rem;
+  padding: 0.55rem;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-md);
+  background: var(--matrix-column-bg);
+  box-shadow: var(--shadow-lg);
+  animation: dropdown-in var(--transition-base);
+}
+
+.technique-detail__tactic-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--matrix-id);
+}
+
+.technique-detail__tactic-clear {
+  padding: 0.15rem 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 400;
+  border: 1px solid var(--matrix-border);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--matrix-id);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--matrix-row-hover);
+  }
+}
+
+.technique-detail__tactic-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 12rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.35rem;
+    font-size: 0.78rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--matrix-row-hover);
+    }
+
+    input {
+      cursor: pointer;
+    }
+  }
+}

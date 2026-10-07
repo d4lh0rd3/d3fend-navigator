@@ -1,0 +1,34 @@
+<div class="sidebar">
+  <input
+    type="search"
+    class="sidebar__search"
+    [placeholder]="i18n.t('sidebar.searchPlaceholder')"
+    [value]="query()"
+    (input)="onInput($any($event.target).value)"
+  />
+  <button type="button" class="sidebar__clear" *ngIf="query()" (click)="onClear()">{{ i18n.t('sidebar.clear') }}</button>
+  <span class="sidebar__count" *ngIf="matchCount() !== null">
+    {{ i18n.t('sidebar.matchCount', { count: matchCount() ?? 0 }) }}
+  </span>
+
+  <label class="sidebar__chain-toggle">
+    <input
+      type="checkbox"
+      [checked]="showMappingChain()"
+      (change)="onToggleShowMappingChain($any($event.target).checked)"
+    />
+    {{ i18n.t('sidebar.showMappingChain') }}
+  </label>
+
+  <app-artifact-filter></app-artifact-filter>
+  <app-platform-filter></app-platform-filter>
+
+  <button
+    type="button"
+    class="sidebar__expand-toggle"
+    (click)="onToggleExpandAll()"
+    [title]="allExpanded() ? i18n.t('sidebar.collapseAllTitle') : i18n.t('sidebar.expandAllTitle')"
+  >
+    {{ allExpanded() ? i18n.t('sidebar.collapseAll') : i18n.t('sidebar.expandAll') }}
+  </button>
+</div>

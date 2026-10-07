@@ -1,0 +1,21 @@
+<header class="app-header">
+  <h1>D3FEND Navigator</h1>
+  <app-theme-toggle></app-theme-toggle>
+</header>
+
+<app-start-page *ngIf="screen() === 'start'" (ready)="onReady()"></app-start-page>
+
+<main class="app-main" *ngIf="screen() === 'workspace'">
+  <app-tabs></app-tabs>
+  <app-sidebar></app-sidebar>
+  <div class="app-body">
+    <app-matrix></app-matrix>
+    <div class="app-side-panel">
+      <app-layer-settings></app-layer-settings>
+      <app-technique-detail></app-technique-detail>
+    </div>
+  </div>
+  <app-technique-context-menu></app-technique-context-menu>
+</main>
+
+<router-outlet />

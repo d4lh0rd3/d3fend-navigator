@@ -1,0 +1,36 @@
+<div class="platform-filter">
+  <button type="button" class="platform-filter__trigger" (click)="toggleOpen()">
+    {{ i18n.t('platformFilter.trigger') }}
+    <span class="platform-filter__beta">BETA</span>
+    <span class="platform-filter__badge" *ngIf="selectedPlatforms().size">{{ selectedPlatforms().size }}</span>
+  </button>
+
+  <div class="platform-filter__panel" *ngIf="isOpen()">
+    <div class="platform-filter__panel-header">
+      <span>{{ i18n.t('platformFilter.header') }}</span>
+      <button
+        type="button"
+        class="platform-filter__clear"
+        *ngIf="selectedPlatforms().size"
+        (click)="clearAll($event)"
+      >
+        {{ i18n.t('common.clearAll') }}
+      </button>
+    </div>
+    <p class="platform-filter__hint">
+      {{ i18n.t('platformFilter.hint') }}
+    </p>
+    <ul class="platform-filter__list">
+      <li *ngFor="let platform of allPlatforms()">
+        <label>
+          <input
+            type="checkbox"
+            [checked]="selectedPlatforms().has(platform)"
+            (change)="togglePlatform(platform)"
+          />
+          {{ platform }}
+        </label>
+      </li>
+    </ul>
+  </div>
+</div>

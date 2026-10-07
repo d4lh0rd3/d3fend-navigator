@@ -1,0 +1,25 @@
+<div class="tabs">
+  <div
+    class="tabs__tab"
+    *ngFor="let tab of tabs()"
+    [class.tabs__tab--active]="tab.id === activeTabId()"
+    role="button"
+    tabindex="0"
+    (click)="onSelect(tab.id)"
+    (keydown.enter)="onSelect(tab.id)"
+    (keydown.space)="onSelect(tab.id); $event.preventDefault()"
+    [title]="tab.layer.name || i18n.t('tabs.unnamedLayer')"
+  >
+    <span class="tabs__label">{{ tab.layer.name || i18n.t('tabs.unnamedLayer') }}</span>
+    <button
+      type="button"
+      class="tabs__close"
+      *ngIf="tabs().length > 1"
+      (click)="onClose($event, tab.id)"
+      [attr.aria-label]="i18n.t('tabs.closeTab')"
+      [title]="i18n.t('tabs.closeTab')"
+    >×</button>
+  </div>
+
+  <button type="button" class="tabs__new" (click)="onNewTab()" [title]="i18n.t('tabs.newLayer')">+</button>
+</div>

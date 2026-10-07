@@ -1,0 +1,26 @@
+<div class="start-page">
+  <h2 class="start-page__title">D3FEND Navigator</h2>
+  <p class="start-page__subtitle">
+    {{ i18n.t('startPage.subtitle') }}
+  </p>
+
+  <div class="start-page__cards">
+    <button type="button" class="start-page__card" (click)="onCreateNew()" [disabled]="loading()">
+      <span class="start-page__card-title">{{ i18n.t('startPage.createNew.title') }}</span>
+      <span class="start-page__card-desc">
+        {{ i18n.t('startPage.createNew.desc') }}
+      </span>
+    </button>
+
+    <label class="start-page__card" [class.start-page__card--disabled]="loading()">
+      <span class="start-page__card-title">{{ i18n.t('startPage.openExisting.title') }}</span>
+      <span class="start-page__card-desc">
+        {{ i18n.t('startPage.openExisting.desc') }}
+      </span>
+      <input type="file" accept="application/json" (change)="onImportFile($event)" [disabled]="loading()" hidden />
+    </label>
+  </div>
+
+  <p class="start-page__status" *ngIf="loading()">{{ i18n.t('startPage.loading') }}</p>
+  <p class="start-page__error" *ngIf="error()">{{ error() }}</p>
+</div>
