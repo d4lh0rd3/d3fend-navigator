@@ -134,16 +134,41 @@ prédicat lié, et les noeuds `OffensiveTechnique` importés depuis ATT&CK (ex. 
 reprennent pas `x_mitre_platforms`.
 
 Le filtre par plateforme s'appuie donc sur une source **externe** : `x_mitre_platforms` est lu dans
-le bundle STIX officiel d'ATT&CK Enterprise (`mitre/cti`, via `scripts/etl/fetch-attack.mjs`) et
+le bundle STIX officiel d'ATT&CK Enterprise (`mitre-attack/attack-stix-data`, via `scripts/etl/fetch-attack.mjs`) et
 attaché aux `AttackMapping` par jointure sur `offensiveTechniqueId`. Une technique D3FEND est
 alors filtrable par plateforme via les techniques offensives qu'elle contre.
 
 Limites :
-- **ATT&CK Enterprise uniquement** (858 techniques couvertes) : `offensivePlatforms` reste vide
+- **ATT&CK Enterprise uniquement** (867 techniques en ATT&CK 20.1) : `offensivePlatforms` reste vide
   pour les 2 862 mappings ICS/SPARTA.
 - 10 valeurs en v1.6.0 : Windows, Linux, macOS, Containers, ESXi, IaaS, SaaS, Identity Provider,
   Network Devices, Office Suite.
 - `D3fendLayer.filters.platforms` est un champ BETA du format de layer.
+
+
+## 8. Réalignement sur la version courante d'ATT&CK
+
+D3FEND référence les identifiants ATT&CK tels qu'ils existaient à sa publication. ATT&CK évolue
+ensuite : en v20.1, 22 des techniques référencées par D3FEND 1.6.0 sont **révoquées** (ex.
+`T1562.003` → `T1690`, toute la famille `T1562` déplacée vers la tactique `defense-impairment`,
+`T08xx` ICS → `T169x`) et 3 sont **dépréciées** sans remplaçant (`T1053.004`, `T0807`, `T0853`).
+ATT&CK Navigator ignore ces entrées : un layer exporté tel quel perd silencieusement de la couverture.
+
+`scripts/etl/resolve-attack-mappings.mjs` réaligne donc chaque mapping Enterprise / ICS sur les
+bundles STIX (`mitre-attack/attack-stix-data`, version épinglée au téléchargement et enregistrée
+dans `attackVersions` du dataset) :
+- technique révoquée → remplacée par la cible de sa relation `revoked-by` (chaînes suivies) ;
+  l'ID d'origine reste dans `originalOffensiveTechniqueId` et l'interface affiche « remplace … » ;
+- tactique D3FEND qui n'est plus une tactique de la technique → mapping décliné sur chacune de ses
+  tactiques courantes (`originalOffensiveTacticId` conserve celle d'origine) ;
+- technique dépréciée / révoquée sans remplaçant / inconnue → mapping conservé (information
+  D3FEND), marqué par `offensiveTechniqueStatus` et exclu des exports ATT&CK Navigator.
+
+Le détail (remplacements, exclusions) est écrit dans `public/data/etl-audit.json`.
+
+L'export ATT&CK Navigator indique aussi `versions.attack` (version majeure, ex. `"20"`) et marque
+`showSubtechniques: true` sur la technique parente de chaque sous-technique annotée : Navigator
+replie les parentes par défaut, ce qui masquait les sous-techniques.
 
 ---
 
@@ -283,13 +308,38 @@ predicate, and the `OffensiveTechnique` nodes imported from ATT&CK (e.g. `d3f:T1
 include `x_mitre_platforms`.
 
 The platform filter therefore relies on an **external** source: `x_mitre_platforms` is read from
-the official ATT&CK Enterprise STIX bundle (`mitre/cti`, via `scripts/etl/fetch-attack.mjs`) and
+the official ATT&CK Enterprise STIX bundle (`mitre-attack/attack-stix-data`, via `scripts/etl/fetch-attack.mjs`) and
 attached to `AttackMapping` records by joining on `offensiveTechniqueId`. A D3FEND technique can
 then be filtered by platform through the offensive techniques it counters.
 
 Limitations:
-- **ATT&CK Enterprise only** (858 techniques covered): `offensivePlatforms` remains empty for the
+- **ATT&CK Enterprise only** (867 techniques in ATT&CK 20.1): `offensivePlatforms` remains empty for the
   2,862 ICS/SPARTA mappings.
 - 10 values in v1.6.0: Windows, Linux, macOS, Containers, ESXi, IaaS, SaaS, Identity Provider,
   Network Devices, Office Suite.
 - `D3fendLayer.filters.platforms` is a BETA field of the layer format.
+
+
+## 8. Alignment with the current ATT&CK version
+
+D3FEND references ATT&CK IDs as they existed when it was published. ATT&CK keeps evolving: in
+v20.1, 22 techniques referenced by D3FEND 1.6.0 are **revoked** (e.g. `T1562.003` → `T1690`, the
+whole `T1562` family moved to the `defense-impairment` tactic, ICS `T08xx` → `T169x`) and 3 are
+**deprecated** without replacement (`T1053.004`, `T0807`, `T0853`). ATT&CK Navigator ignores those
+entries: a layer exported as-is silently loses coverage.
+
+`scripts/etl/resolve-attack-mappings.mjs` therefore aligns every Enterprise / ICS mapping with the
+STIX bundles (`mitre-attack/attack-stix-data`, version pinned at download time and recorded in
+the dataset's `attackVersions`):
+- revoked technique → replaced by the target of its `revoked-by` relationship (chains followed);
+  the original ID is kept in `originalOffensiveTechniqueId` and the UI shows "replaces …";
+- D3FEND tactic no longer a tactic of the technique → mapping expanded to each of its current
+  tactics (`originalOffensiveTacticId` keeps the original one);
+- deprecated / revoked without replacement / unknown technique → mapping kept (D3FEND
+  information), flagged through `offensiveTechniqueStatus` and excluded from ATT&CK Navigator exports.
+
+Details (replacements, exclusions) are written to `public/data/etl-audit.json`.
+
+The ATT&CK Navigator export also sets `versions.attack` (major version, e.g. `"20"`) and
+`showSubtechniques: true` on the parent of every annotated sub-technique: Navigator collapses
+parents by default, which used to hide sub-techniques.

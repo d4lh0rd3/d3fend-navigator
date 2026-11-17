@@ -109,6 +109,18 @@ export class TechniqueDetailComponent {
     this.selectedTacticsSignal.set(new Set());
   }
 
+  /** Version d'ATT&CK du dataset pour le framework du mapping (ex. "20.1"), "" si inconnue. */
+  attackVersionOf(m: AttackMapping): string {
+    const versions = this.dataService.dataset()?.attackVersions;
+    if (m.offensiveFramework === "attack-enterprise") return versions?.["attack-enterprise"] ?? "";
+    if (m.offensiveFramework === "attack-ics") return versions?.["attack-ics"] ?? "";
+    return "";
+  }
+
+  isObsoleteAttackTechnique(m: AttackMapping): boolean {
+    return m.offensiveTechniqueStatus === "deprecated" || m.offensiveTechniqueStatus === "revoked" || m.offensiveTechniqueStatus === "unknown";
+  }
+
   readonly technique = computed(() => {
     const id = this.layerService.selectedTechniqueId();
     const dataset = this.dataService.dataset();

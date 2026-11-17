@@ -31,9 +31,11 @@ Corporation. Source: <https://d3fend.mitre.org/tou/>.
 ## MITRE ATT&CK
 
 This project's ETL pipeline downloads the official MITRE ATT&CK Enterprise and
-ATT&CK ICS STIX bundles (from <https://github.com/mitre/cti>) to resolve
-tactic names/shortnames and technique platforms, and the resulting mapping
-data is bundled with and served by the application.
+ATT&CK ICS STIX bundles (from <https://github.com/mitre-attack/attack-stix-data>)
+to resolve tactic names/shortnames and technique platforms, and to align the
+D3FEND mappings with the current ATT&CK version (revoked and deprecated
+techniques). The resulting mapping data is bundled with and served by the
+application.
 
 > LICENSE
 >
@@ -47,7 +49,7 @@ data is bundled with and served by the application.
 > the permission of The MITRE Corporation."
 
 MITRE ATT&CK® is a registered trademark of The MITRE Corporation. Source:
-<https://github.com/mitre/cti/blob/master/LICENSE.txt>.
+<https://github.com/mitre-attack/attack-stix-data/blob/master/LICENSE.txt>.
 
 ## Aerospace SPARTA
 
@@ -127,10 +129,12 @@ Source : <https://d3fend.mitre.org/tou/>.
 ## MITRE ATT&CK
 
 Le pipeline ETL de ce projet télécharge les bundles STIX officiels MITRE ATT&CK
-Enterprise et ATT&CK ICS (depuis <https://github.com/mitre/cti>) afin de résoudre
-les noms et noms courts des tactiques ainsi que les plateformes des techniques,
-et les données de correspondance qui en résultent sont fournies avec
-l'application et servies par celle-ci.
+Enterprise et ATT&CK ICS (depuis <https://github.com/mitre-attack/attack-stix-data>)
+afin de résoudre les noms et noms courts des tactiques ainsi que les plateformes
+des techniques, et de réaligner les correspondances D3FEND sur la version
+courante d'ATT&CK (techniques révoquées et dépréciées). Les données de
+correspondance qui en résultent sont fournies avec l'application et servies par
+celle-ci.
 
 > LICENCE
 >
@@ -144,7 +148,7 @@ l'application et servies par celle-ci.
 > l'autorisation de The MITRE Corporation. »
 
 MITRE ATT&CK® est une marque déposée de The MITRE Corporation. Source :
-<https://github.com/mitre/cti/blob/master/LICENSE.txt>.
+<https://github.com/mitre-attack/attack-stix-data/blob/master/LICENSE.txt>.
 
 ## Aerospace SPARTA
 

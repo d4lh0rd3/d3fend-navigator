@@ -18,6 +18,20 @@ export interface AttackMapping {
   /** BETA — x_mitre_platforms du bundle STIX ATT&CK Enterprise (vide pour ICS/SPARTA) */
   offensivePlatforms: string[];
 
+  /**
+   * Statut de la technique offensive dans la version d'ATT&CK du dataset
+   * (scripts/etl/resolve-attack-mappings.mjs) :
+   * - "active" : identifiant D3FEND toujours valide ;
+   * - "remapped" : technique révoquée par ATT&CK, remplacée par son successeur ;
+   * - "deprecated" / "revoked" (sans remplaçant) / "unknown" : absente d'ATT&CK Navigator,
+   *   exclue des exports ATT&CK. Toujours "active" pour SPARTA.
+   */
+  offensiveTechniqueStatus: "active" | "remapped" | "deprecated" | "revoked" | "unknown";
+  /** identifiant fourni par D3FEND, si remplacé (ex. "T1562.003" pour T1690) */
+  originalOffensiveTechniqueId: string | null;
+  /** tactique fournie par D3FEND, si elle n'est plus une tactique de la technique dans ATT&CK */
+  originalOffensiveTacticId: string | null;
+
   /** verbe côté défensif reliant la technique D3FEND à l'artefact partagé (ex. "hardens") */
   viaDefensiveRelation: string;
   viaDefensiveArtifactId: string;

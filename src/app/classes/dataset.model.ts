@@ -14,6 +14,8 @@ export interface D3fendDataset {
   attackMappings: AttackMapping[];
   /** TA-id ATT&CK (ex. "TA0009") -> shortname (ex. "collection"), Enterprise et ICS */
   attackTacticShortnames: Record<string, string>;
+  /** version d'ATT&CK des bundles STIX utilisés par l'ETL, par framework (ex. "20.1") */
+  attackVersions?: Partial<Record<"attack-enterprise" | "attack-ics", string | null>>;
 }
 
 /** Forme de public/data/versions.json. */

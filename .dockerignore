@@ -17,3 +17,10 @@ data/raw
 # Divers
 *.log
 npm-debug.log
+
+# Secrets / fichiers locaux sensibles
+.env
+.env.*
+*.pem
+*.key
+.claude

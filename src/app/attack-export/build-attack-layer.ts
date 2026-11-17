@@ -24,6 +24,51 @@ function hasMeaningfulAnnotation(a: LayerTechniqueAnnotation): boolean {
   return a.color !== "" || a.score !== null || a.comment !== "";
 }
 
+/**
+ * Techniques dépréciées, révoquées sans remplaçant ou inconnues dans la version d'ATT&CK du
+ * dataset : Navigator ne les affiche pas. Un dataset antérieur sans statut est accepté tel quel.
+ */
+function isExportable(m: AttackMapping): boolean {
+  return m.offensiveTechniqueStatus === undefined || m.offensiveTechniqueStatus === "active" || m.offensiveTechniqueStatus === "remapped";
+}
+
+/** "T1110.002" -> "T1110" ; null pour une technique de premier niveau. */
+function parentTechniqueId(techniqueId: string): string | null {
+  const dot = techniqueId.indexOf(".");
+  return dot > 0 ? techniqueId.slice(0, dot) : null;
+}
+
+/**
+ * Navigator replie toutes les techniques parentes : sans `showSubtechniques`, une
+ * sous-technique annotée reste cachée. Pour chaque paire (sous-technique, tactique), la
+ * parente sur la même tactique est dépliée — en complétant son entrée si elle est annotée,
+ * sinon en ajoutant une entrée sans annotation.
+ */
+function expandParentsOfSubtechniques(techniques: AttackNavigatorTechnique[]): AttackNavigatorTechnique[] {
+  const byKey = new Map(techniques.map((t) => [`${t.techniqueID}|${t.tactic}`, t]));
+  const added: AttackNavigatorTechnique[] = [];
+  for (const t of techniques) {
+    const parentId = parentTechniqueId(t.techniqueID);
+    if (!parentId) continue;
+    const key = `${parentId}|${t.tactic}`;
+    const parent = byKey.get(key);
+    if (parent) {
+      parent.showSubtechniques = true;
+      continue;
+    }
+    const placeholder: AttackNavigatorTechnique = { techniqueID: parentId, tactic: t.tactic, showSubtechniques: true };
+    byKey.set(key, placeholder);
+    added.push(placeholder);
+  }
+  return [...techniques, ...added];
+}
+
+/** "20.1" -> "20" : Navigator identifie les versions d'ATT&CK par leur numéro majeur. */
+function attackMajorVersion(version: string | null | undefined): string | undefined {
+  const major = version?.split(".")[0];
+  return major && /^\d+$/.test(major) ? major : undefined;
+}
+
 interface PendingTechnique {
   techniqueID: string;
   tactic: string;
@@ -49,7 +94,7 @@ function buildPendingTechniques(
 ): Map<string, PendingTechnique> {
   const mappingsByD3fendId = new Map<string, AttackMapping[]>();
   for (const m of attackMappings) {
-    if (m.offensiveFramework !== framework) continue;
+    if (m.offensiveFramework !== framework || !isExportable(m)) continue;
     const list = mappingsByD3fendId.get(m.d3fendTechniqueId);
     if (list) {
       list.push(m);
@@ -123,7 +168,7 @@ export function buildAttackNavigatorLayer(
     throw new Error("NO_ATTACK_MAPPING_FOUND");
   }
 
-  const techniques: AttackNavigatorTechnique[] = [...pendingByKey.values()].map((p) => {
+  const annotatedTechniques: AttackNavigatorTechnique[] = [...pendingByKey.values()].map((p) => {
     const technique: AttackNavigatorTechnique = {
       techniqueID: p.techniqueID,
       tactic: p.tactic,
@@ -137,10 +182,19 @@ export function buildAttackNavigatorLayer(
     }
     return technique;
   });
+  const techniques = expandParentsOfSubtechniques(annotatedTechniques);
+  const versions = dataset.attackVersions;
+  const attackVersion = attackMajorVersion(
+    framework === "attack-enterprise" ? versions?.["attack-enterprise"] : versions?.["attack-ics"]
+  );
 
   return {
     name: options.exportedLayerName,
-    versions: { navigator: NAVIGATOR_MIN_VERSION, layer: LAYER_FORMAT_VERSION },
+    versions: {
+      ...(attackVersion ? { attack: attackVersion } : {}),
+      navigator: NAVIGATOR_MIN_VERSION,
+      layer: LAYER_FORMAT_VERSION
+    },
     domain,
     description: options.description,
     sorting: 0,

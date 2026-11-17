@@ -126,6 +126,18 @@
   border-radius: var(--radius-sm);
 }
 
+.technique-detail__attack-status {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--matrix-id);
+  margin-left: 0.3rem;
+  white-space: nowrap;
+}
+
+.technique-detail__attack-status--obsolete {
+  text-decoration: underline dotted;
+}
+
 .technique-detail__tactic {
   font-size: 0.7rem;
   color: var(--matrix-caret);

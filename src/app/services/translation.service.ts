@@ -58,6 +58,10 @@ const FR = {
   "techniqueDetail.noRelationOrMapping":
     "Aucune relation vers un artefact ni mapping offensif pour cette technique (ni ses éventuelles sous-techniques).",
   "techniqueDetail.selectHint": "Sélectionne une technique pour voir son détail.",
+  "techniqueDetail.attackReplaces": "remplace {id}",
+  "techniqueDetail.attackReplacesTitle": "D3FEND référence {id}, révoquée dans ATT&CK {version} et remplacée par cette technique.",
+  "techniqueDetail.attackObsolete": "absente d'ATT&CK {version}",
+  "techniqueDetail.attackObsoleteTitle": "Technique dépréciée ou révoquée sans remplaçant dans ATT&CK {version} : exclue des exports ATT&CK Navigator.",
 
   "contextMenu.viewTactic": "Voir la tactique",
   "contextMenu.viewTechnique": "Voir la technique",
@@ -150,6 +154,10 @@ const EN: Record<TranslationKey, string> = {
   "techniqueDetail.noRelationOrMapping":
     "No artifact relation nor offensive mapping for this technique (nor its sub-techniques, if any).",
   "techniqueDetail.selectHint": "Select a technique to see its details.",
+  "techniqueDetail.attackReplaces": "replaces {id}",
+  "techniqueDetail.attackReplacesTitle": "D3FEND references {id}, revoked in ATT&CK {version} and replaced by this technique.",
+  "techniqueDetail.attackObsolete": "not in ATT&CK {version}",
+  "techniqueDetail.attackObsoleteTitle": "Technique deprecated or revoked without replacement in ATT&CK {version}: excluded from ATT&CK Navigator exports.",
 
   "contextMenu.viewTactic": "View tactic",
   "contextMenu.viewTechnique": "View technique",

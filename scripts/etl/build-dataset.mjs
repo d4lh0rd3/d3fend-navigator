@@ -10,7 +10,8 @@ import { fileURLToPath } from "node:url";
 import { parseHierarchy } from "./parse-hierarchy.mjs";
 import { parseArtifacts } from "./parse-artifacts.mjs";
 import { parseAttackMappings } from "./parse-attack-mappings.mjs";
-import { parseAttackPlatforms } from "./parse-attack-platforms.mjs";
+import { parseAttackStix } from "./parse-attack-stix.mjs";
+import { resolveAttackMappings } from "./resolve-attack-mappings.mjs";
 import { readJson } from "./lib/util.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -32,18 +33,25 @@ async function main() {
   console.log(`      -> ${artifacts.length} artefacts, ${relationships.length} relations`);
   console.log(`      -> prédicats de relation observés : ${observedPredicates.join(", ")}`);
 
-  console.log(`[3/5] plateformes (Enterprise) + shortnames de tactiques (Enterprise + ICS), source externe à D3FEND...`);
-  const { platformsByAttackId, tacticShortnameByAttackId } = await parseAttackPlatforms(ROOT);
+  console.log(`[3/5] bundles STIX ATT&CK (version, plateformes, tactiques, révocations), source externe à D3FEND...`);
+  const { catalogs, platformsByAttackId, tacticShortnameByAttackId, attackVersions } = await parseAttackStix(ROOT);
+  console.log(`      -> versions ATT&CK : ${Object.entries(attackVersions).map(([f, v]) => `${f} ${v ?? "inconnue"}`).join(", ")}`);
   console.log(`      -> ${platformsByAttackId.size} techniques ATT&CK avec plateformes connues`);
   console.log(`      -> ${tacticShortnameByAttackId.size} tactiques ATT&CK avec shortname connu (Enterprise + ICS)`);
 
   console.log(`[4/5] mappings vers les frameworks offensifs depuis d3fend-full-mappings.json...`);
-  const { mappings, unresolvedTechniqueLocalNames } = await parseAttackMappings(
+  const { mappings: rawMappings, unresolvedTechniqueLocalNames } = await parseAttackMappings(
     rawDir,
     techniques,
     platformsByAttackId
   );
-  console.log(`      -> ${mappings.length} mappings`);
+  const { mappings, stats: attackResolution } = resolveAttackMappings(rawMappings, catalogs);
+  console.log(`      -> ${mappings.length} mappings (${rawMappings.length} avant réalignement sur ATT&CK)`);
+  console.log(
+    `      -> réalignement ATT&CK : ${attackResolution.remappedTechniques.size} techniques révoquées remplacées, ` +
+      `${attackResolution.remappedTactics} mappings changés de tactique, ` +
+      `${attackResolution.excluded.size} techniques dépréciées/révoquées sans remplaçant/inconnues`
+  );
   if (unresolvedTechniqueLocalNames.length) {
     console.warn(
       `      -> AVERTISSEMENT : ${unresolvedTechniqueLocalNames.length} noms de technique non résolus (ignorés) :`,
@@ -80,6 +88,7 @@ async function main() {
     artifactRelationships: relationships,
     attackMappings: mappings,
     attackTacticShortnames: Object.fromEntries(tacticShortnameByAttackId),
+    attackVersions,
   };
 
   await mkdir(generatedDir, { recursive: true });
@@ -90,7 +99,16 @@ async function main() {
   await writeFile(
     auditFile,
     JSON.stringify(
-      { version, generatedAt: dataset.generatedAt, observedRelationPredicates: observedPredicates, unresolvedTechniqueLocalNames },
+      {
+        version,
+        generatedAt: dataset.generatedAt,
+        attackVersions,
+        observedRelationPredicates: observedPredicates,
+        unresolvedTechniqueLocalNames,
+        attackRemappedTechniques: Object.fromEntries([...attackResolution.remappedTechniques].sort()),
+        attackRemappedTacticMappings: attackResolution.remappedTactics,
+        attackExcludedTechniques: Object.fromEntries([...attackResolution.excluded].sort()),
+      },
       null,
       2
     )

@@ -1,0 +1,22 @@
+# Lancement durci : docker compose up -d --build
+services:
+  d3fend-navigator:
+    build: .
+    image: d3fend-navigator
+    container_name: d3fend-navigator
+    # Exposé uniquement sur la boucle locale ; placer un reverse proxy TLS devant
+    # pour une exposition réseau.
+    ports:
+      - "127.0.0.1:8080:8080"
+    user: "101:101"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m,uid=101,gid=101,mode=0700
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 1.0
+    restart: unless-stopped

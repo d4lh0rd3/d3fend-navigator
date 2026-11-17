@@ -84,6 +84,16 @@
             [title]="i18n.t('common.via') + ' ' + m.viaDefensiveRelation + ' → ' + m.viaDefensiveArtifactId + '  /  ' + m.viaOffensiveRelation + ' → ' + m.viaOffensiveArtifactName"
           >{{ m.offensiveTechniqueId }}</span>
           {{ m.offensiveTechniqueName }}
+          <span
+            class="technique-detail__attack-status"
+            *ngIf="m.originalOffensiveTechniqueId"
+            [title]="i18n.t('techniqueDetail.attackReplacesTitle', { id: m.originalOffensiveTechniqueId, version: attackVersionOf(m) })"
+          >{{ i18n.t('techniqueDetail.attackReplaces', { id: m.originalOffensiveTechniqueId }) }}</span>
+          <span
+            class="technique-detail__attack-status technique-detail__attack-status--obsolete"
+            *ngIf="isObsoleteAttackTechnique(m)"
+            [title]="i18n.t('techniqueDetail.attackObsoleteTitle', { version: attackVersionOf(m) })"
+          >{{ i18n.t('techniqueDetail.attackObsolete', { version: attackVersionOf(m) }) }}</span>
           <span class="technique-detail__tactic" *ngIf="m.offensiveTacticName">{{ m.offensiveTacticName }}</span>
           <span class="technique-detail__via" *ngIf="m.sourceTechniqueName">{{ i18n.t('common.via') }} {{ m.sourceTechniqueName }}</span>
         </div>

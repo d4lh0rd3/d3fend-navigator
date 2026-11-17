@@ -45,11 +45,26 @@ Aucun prérequis autre que Docker — le dataset D3FEND est déjà versionné da
 aucun accès réseau à MITRE/GitHub n'est nécessaire pour builder l'image.
 
 ```bash
+docker compose up -d --build
+```
+
+Ou, sans Compose, avec les mêmes options de durcissement :
+
+```bash
 docker build -t d3fend-navigator .
-docker run --rm -p 8080:8080 d3fend-navigator
+docker run -d --rm --name d3fend-navigator -p 127.0.0.1:8080:8080 \
+  --read-only --tmpfs /tmp:rw,noexec,nosuid,nodev,size=16m,uid=101,gid=101,mode=0700 \
+  --cap-drop ALL --security-opt no-new-privileges:true \
+  --pids-limit 64 --memory 128m d3fend-navigator
 ```
 
 Puis ouvrir <http://localhost:8080>.
+
+Le conteneur est durci : nginx non-root sans aucune capability, système de fichiers en
+lecture seule, contenu et configuration non modifiables par le processus, CSP stricte
+(nonce par requête, Trusted Types, sans `'unsafe-inline'`), méthodes limitées à GET/HEAD.
+Il écoute uniquement en HTTP sur `127.0.0.1` : pour une exposition réseau, placer devant un
+reverse proxy qui gère le TLS.
 
 ## Démarrage sans Docker
 
@@ -75,7 +90,7 @@ partir des exports officiels D3FEND et des bundles STIX ATT&CK :
 
 ```bash
 npm run etl:fetch          # télécharge l'export officiel D3FEND (data/raw/, non versionné)
-npm run etl:fetch-attack   # télécharge les bundles STIX ATT&CK Enterprise + ICS
+npm run etl:fetch-attack   # télécharge les bundles STIX ATT&CK Enterprise + ICS (dernière version, ou : -- 20.1)
 npm run etl:build          # génère public/data/d3fend-dataset.v<version>.json
 ```
 
@@ -139,11 +154,26 @@ No prerequisites other than Docker — the D3FEND dataset is already versioned i
 so no network access to MITRE/GitHub is needed to build the image.
 
 ```bash
+docker compose up -d --build
+```
+
+Or, without Compose, with the same hardening options:
+
+```bash
 docker build -t d3fend-navigator .
-docker run --rm -p 8080:8080 d3fend-navigator
+docker run -d --rm --name d3fend-navigator -p 127.0.0.1:8080:8080 \
+  --read-only --tmpfs /tmp:rw,noexec,nosuid,nodev,size=16m,uid=101,gid=101,mode=0700 \
+  --cap-drop ALL --security-opt no-new-privileges:true \
+  --pids-limit 64 --memory 128m d3fend-navigator
 ```
 
 Then open <http://localhost:8080>.
+
+The container is hardened: non-root nginx with no capabilities, read-only filesystem,
+content and configuration not writable by the process, strict CSP (per-request nonce,
+Trusted Types, no `'unsafe-inline'`), methods restricted to GET/HEAD.
+It only listens over plain HTTP on `127.0.0.1`: for network exposure, put a TLS-terminating
+reverse proxy in front of it.
 
 ## Getting started without Docker
 
@@ -169,7 +199,7 @@ from the official D3FEND exports and the ATT&CK STIX bundles:
 
 ```bash
 npm run etl:fetch          # downloads the official D3FEND export (data/raw/, not versioned)
-npm run etl:fetch-attack   # downloads the ATT&CK Enterprise + ICS STIX bundles
+npm run etl:fetch-attack   # downloads the ATT&CK Enterprise + ICS STIX bundles (latest, or: -- 20.1)
 npm run etl:build          # generates public/data/d3fend-dataset.v<version>.json
 ```
 

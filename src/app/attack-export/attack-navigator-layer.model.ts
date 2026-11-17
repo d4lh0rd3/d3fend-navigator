@@ -5,6 +5,8 @@
 export interface AttackNavigatorLayer {
   name: string;
   versions: {
+    /** version majeure d'ATT&CK (ex. "20") : Navigator charge cette version si disponible */
+    attack?: string;
     navigator: string;
     layer: string;
   };
@@ -37,10 +39,16 @@ export interface AttackNavigatorTechnique {
   techniqueID: string;
   /** shortname de la tactique (ex. "collection"), pas le nom affiché ni le TA-id */
   tactic: string;
-  color: string;
-  comment: string;
-  enabled: boolean;
+  /** omis pour une entrée sans annotation (technique parente simplement dépliée) */
+  color?: string;
+  comment?: string;
+  enabled?: boolean;
   /** omis (et non null) pour une technique sans score, conformément à la spec */
   score?: number;
-  metadata: { name: string; value: string }[];
+  metadata?: { name: string; value: string }[];
+  /**
+   * Navigator replie les techniques parentes par défaut : leurs sous-techniques, même
+   * annotées, restent invisibles tant que la parente ne porte pas ce drapeau.
+   */
+  showSubtechniques?: boolean;
 }
